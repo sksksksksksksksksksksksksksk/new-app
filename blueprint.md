@@ -3,34 +3,23 @@
 
 ## Overview
 
-This document outlines the plan for creating a Flutter application with a login screen based on the provided design.
-
-## Current Plan
-
-### 1. Update Dependencies
-- Add `go_router` for navigation.
-- Add `google_fonts` for custom fonts.
-- Add `provider` for state management.
-
-### 2. Create Screens
-- Create a login screen (`lib/screens/login_screen.dart`).
-- Create a placeholder sign-up screen (`lib/screens/signup_screen.dart`).
-
-### 3. Configure Routing
-- Set up routes using `go_router` in `lib/app_router.dart`.
-
-### 4. Update `main.dart`
-- Integrate `go_router`.
-- Set up the application theme.
-- Implement a `ThemeProvider`.
-
-### 5. Implement Login UI
-- Build the login screen UI as per the design, using appropriate Flutter widgets.
+This document outlines the style, design, and features implemented in the application.
 
 ## Implemented Features
 
-- **Dependencies**: Added `go_router`, `google_fonts`, and `provider`.
-- **Screens**: Created `LoginScreen` and `SignUpScreen`.
-- **Routing**: Configured routes for login and sign-up screens.
-- **Theming**: Implemented a custom theme with a color scheme and text styles.
-- **Login UI**: The login screen is implemented with a back button, sign-up button, welcome text, email and password fields, forgot password button, login button, and a link to the sign-up screen.
+### Style and Design
+- **Theming**: Implemented a custom theme with a color scheme and text styles using Material 3 principles. The `google_fonts` package is used for custom typography (Roboto).
+- **Login Screen UI**: The login screen features a modern design with a prominent "Welcome Back" message, custom-styled text fields for email and password, and clear buttons for login and navigation to the sign-up screen.
+- **Sign-Up Screen UI**: The sign-up screen matches the modern and visually consistent design of the login screen. It features a blue gradient background, a white card for the form, and custom-styled fields for full name, email, and password.
+
+### Features
+- **Dependencies**:
+    - `go_router` for declarative routing.
+    - `google_fonts` for custom fonts.
+    - `provider` for state management (though not fully utilized yet).
+- **Screens**:
+    - `LoginScreen` (`lib/login_screen.dart`)
+    - `SignUpScreen` (`lib/signup_screen.dart`)
+- **Routing**:
+    - Configured routes for `/` (login) and `/signup`.
+    - Navigation between login and sign-up screens is implemented.
