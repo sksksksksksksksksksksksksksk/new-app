@@ -1,12 +1,23 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
-class AuthService {
+class AuthService with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Stream<User?> get onAuthStateChanged => _auth.authStateChanges();
+  User? _user;
+  User? get user => _user;
+
+  AuthService() {
+    _auth.authStateChanges().listen(_onAuthStateChanged);
+  }
+
+  void _onAuthStateChanged(User? user) {
+    _user = user;
+    notifyListeners();
+  }
 
   Future<User?> signUp(String email, String password, String fullName) async {
     try {
@@ -14,19 +25,18 @@ class AuthService {
         email: email,
         password: password,
       );
-      final User? user = userCredential.user;
+      final User? newUser = userCredential.user;
 
-      if (user != null) {
-        await _firestore.collection('users').doc(user.uid).set({
+      if (newUser != null) {
+        await _firestore.collection('users').doc(newUser.uid).set({
           'fullName': fullName,
           'email': email,
         });
       }
 
-      return user;
+      return newUser;
     } catch (e) {
-      // ignore: avoid_print
-      print(e.toString());
+      debugPrint(e.toString());
       return null;
     }
   }
@@ -39,8 +49,7 @@ class AuthService {
       );
       return userCredential.user;
     } catch (e) {
-      // ignore: avoid_print
-      print(e.toString());
+      debugPrint(e.toString());
       return null;
     }
   }

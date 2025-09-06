@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "595818474918",
+    "project_id": "sasi-2322005",
+    "storage_bucket": "sasi-2322005.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:595818474918:android:3a9e9641b9062b14223367",
+        "android_client_info": {
+          "package_name": "com.example.myapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnKwIipLhrvd7rQRCS8nsgh0xJOelYrDY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

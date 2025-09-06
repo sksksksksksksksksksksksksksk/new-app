@@ -1,12 +1,10 @@
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/app_router.dart';
 import 'package:myapp/auth_service.dart';
 import 'package:myapp/firebase_options.dart';
-import 'package:myapp/user_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -14,15 +12,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => ThemeProvider()),
-        ChangeNotifierProvider(create: (context) => UserProvider()),
-        StreamProvider<User?>(
-          create: (context) => AuthService().onAuthStateChanged,
-          initialData: null,
-        ),
+        ChangeNotifierProvider(create: (_) => AuthService()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
       child: const MyApp(),
     ),
@@ -45,6 +40,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+    final appRouter = AppRouter(authService);
+
     const Color primarySeedColor = Color(0xFF1877F2);
 
     final TextTheme appTextTheme = TextTheme(
@@ -96,7 +94,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'Flutter Demo',
       theme: lightTheme,
-      routerConfig: router,
+      routerConfig: appRouter.router,
       debugShowCheckedModeBanner: false,
     );
   }
