@@ -1,13 +1,29 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/app_router.dart';
+import 'package:myapp/auth_service.dart';
+import 'package:myapp/firebase_options.dart';
+import 'package:myapp/user_provider.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+        StreamProvider<User?>(
+          create: (context) => AuthService().onAuthStateChanged,
+          initialData: null,
+        ),
+      ],
       child: const MyApp(),
     ),
   );

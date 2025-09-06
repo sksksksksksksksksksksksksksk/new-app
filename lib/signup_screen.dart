@@ -2,9 +2,32 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myapp/auth_service.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
+
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  final _authService = AuthService();
+  final _formKey = GlobalKey<FormState>();
+
+  String _fullName = '';
+  String _email = '';
+  String _password = '';
+
+  Future<void> _signUp() async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      final user = await _authService.signUp(_email, _password, _fullName);
+      if (user != null && mounted) {
+        context.go('/home');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,72 +96,85 @@ class SignUpScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        // Full Name Field
-                        TextFormField(
-                          decoration: InputDecoration(
-                            hintText: 'Full Name',
-                            prefixIcon: Icon(Icons.person_outline, color: Colors.grey[600]),
-                            filled: true,
-                            fillColor: Colors.grey[100],
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide.none,
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          // Full Name Field
+                          TextFormField(
+                            onSaved: (value) => _fullName = value!,
+                            validator: (value) =>
+                                value!.isEmpty ? 'Please enter your full name' : null,
+                            decoration: InputDecoration(
+                              hintText: 'Full Name',
+                              prefixIcon: Icon(Icons.person_outline, color: Colors.grey[600]),
+                              filled: true,
+                              fillColor: Colors.grey[100],
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 16),
-                        // Email Field
-                        TextFormField(
-                          decoration: InputDecoration(
-                            hintText: 'Email',
-                            prefixIcon: Icon(Icons.email_outlined, color: Colors.grey[600]),
-                            filled: true,
-                            fillColor: Colors.grey[100],
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide.none,
+                          const SizedBox(height: 16),
+                          // Email Field
+                          TextFormField(
+                            onSaved: (value) => _email = value!,
+                            validator: (value) =>
+                                value!.isEmpty ? 'Please enter your email' : null,
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(
+                              hintText: 'Email',
+                              prefixIcon: Icon(Icons.email_outlined, color: Colors.grey[600]),
+                              filled: true,
+                              fillColor: Colors.grey[100],
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 16),
-                        // Password Field
-                        TextFormField(
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            hintText: 'Password',
-                            prefixIcon: Icon(Icons.lock_outline, color: Colors.grey[600]),
-                            filled: true,
-                            fillColor: Colors.grey[100],
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide.none,
+                          const SizedBox(height: 16),
+                          // Password Field
+                          TextFormField(
+                            onSaved: (value) => _password = value!,
+                            validator: (value) =>
+                                value!.isEmpty ? 'Please enter your password' : null,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              hintText: 'Password',
+                              prefixIcon: Icon(Icons.lock_outline, color: Colors.grey[600]),
+                              filled: true,
+                              fillColor: Colors.grey[100],
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 24),
-                        // Sign Up Button
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            backgroundColor: const Color(0xFF4A80F0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                          const SizedBox(height: 24),
+                          // Sign Up Button
+                          ElevatedButton(
+                            onPressed: _signUp,
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              backgroundColor: const Color(0xFF4A80F0),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: Text(
+                              'Sign Up',
+                              style: GoogleFonts.roboto(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
-                          child: Text(
-                            'Sign Up',
-                            style: GoogleFonts.roboto(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 24),
